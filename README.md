@@ -66,9 +66,28 @@ This project is configured to run in a Dev Container, which provides a consisten
 
 ### Prerequisites
 
-- **Docker Desktop:** Install Docker Desktop for your operating system.
-- **Visual Studio Code:** Install VS Code.
-- **VS Code Remote - Containers extension:** Install the "Remote - Containers" (ms-vscode-remote.remote-containers) extension from the VS Code Marketplace.
+-   **Container Runtime:**
+    *   **Podman:** Recommended. Install Podman for your operating system. (e.g., from [podman.io](https://podman.io/getting-started/installation)) Ensure the Podman service is running if you are using Podman Desktop or need a socket for VS Code (e.g., `podman machine start` on macOS/Windows, or ensure the user systemd socket is active on Linux: `systemctl --user start podman.socket`).
+    *   **Docker Desktop:** Alternatively, Docker Desktop can be used.
+-   **Visual Studio Code:** Install VS Code.
+-   **VS Code Remote - Containers extension:** Install the "Remote - Containers" (ms-vscode-remote.remote-containers) extension from the VS Code Marketplace.
+
+### Configuring VS Code with Podman
+
+The "Remote - Containers" extension in VS Code typically looks for a Docker socket to communicate with the container runtime. Podman can provide a compatible socket.
+
+1.  **Ensure Podman is installed and running.**
+2.  **Socket Activation (Linux):** If you are on Linux and not using Podman Desktop, ensure the Podman API socket is active:
+    ```bash
+    systemctl --user enable --now podman.socket
+    ```
+    You can check its status with `systemctl --user status podman.socket`. The socket is often located at `/run/user/$UID/podman/podman.sock`.
+3.  **Socket for macOS/Windows (Podman Desktop):** If using Podman Desktop, the virtual machine it runs usually exposes a compatible Docker API socket. Ensure your Podman machine is running.
+4.  **VS Code Detection:**
+    *   VS Code's "Remote - Containers" extension, when using its default settings, should be able to detect and use the Podman-provided Docker-compatible socket if it's available at the default Docker socket locations or if `DOCKER_HOST` environment variable is set.
+    *   For explicit configuration or troubleshooting, refer to the official VS Code documentation on [Using Podman with Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers#_using-podman). Some users might need to set the `docker.host` setting in VS Code's `settings.json` if the socket is in a non-standard location, or ensure that the `DOCKER_HOST` environment variable points to the Podman socket (e.g., `export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock` on Linux).
+
+*The `Dockerfile` provided in `.devcontainer/Dockerfile` is compatible with both Podman and Docker.*
 
 ### Setup and Running the Project Locally
 
@@ -83,18 +102,12 @@ This project is configured to run in a Dev Container, which provides a consisten
     - Click "Reopen in Container".
     - If you don't see the prompt, you can open the Command Palette (Ctrl+Shift+P or Cmd+Shift+P) and type/select "Remote-Containers: Reopen in Container".
 3.  **First-time Build:**
-    - The first time you open the project in the Dev Container, VS Code will build the Docker image defined in `.devcontainer/Dockerfile`. This might take a few minutes.
+    - The first time you open the project in the Dev Container, VS Code (using Podman/Docker) will build the Docker image defined in `.devcontainer/Dockerfile`. This might take a few minutes.
     - You can see the progress in the terminal window.
     - Once the build is complete, VS Code will connect to the container, and your project files will be available. The `postCreateCommand` in `devcontainer.json` will run, verifying `dotnet` and `protoc` versions.
 4.  **Developing in the Container:**
     - You can now open terminals, install dependencies, run `dotnet` commands, compile `.proto` files, and debug your application directly from within the Dev Container environment.
     - All required tools (like the .NET SDK and `protoc`) are available in the container.
-    - For example, to compile a `.proto` file (actual commands will depend on your gRPC C# setup within each project):
-      ```bash
-      # Example: Navigate to a service directory
-      # cd src/Services/User
-      # dotnet build (if Grpc.Tools is configured in the .csproj)
-      ```
 
 ### Rebuilding the Dev Container
 
