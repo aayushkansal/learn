@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package clients;
+
+option csharp_namespace = "SurveyService.Clients";
+
+service ClientService {
+  rpc CreateClient (CreateClientRequest) returns (CreateClientResponse);
+  rpc GetClient (GetClientRequest) returns (GetClientResponse);
+  rpc UpdateClient (UpdateClientRequest) returns (UpdateClientResponse);
+  rpc DeleteClient (DeleteClientRequest) returns (DeleteClientResponse);
+}
+
+message Client {
+  string id = 1;
+  string name = 2;
+  string organization_name = 3;
+  // Add other relevant client fields
+}
+
+message CreateClientRequest {
+  Client client = 1;
+}
+
+message CreateClientResponse {
+  Client client = 1;
+}
+
+message GetClientRequest {
+  string id = 1;
+}
+
+message GetClientResponse {
+  Client client = 1;
+}
+
+message UpdateClientRequest {
+  Client client = 1;
+}
+
+message UpdateClientResponse {
+  Client client = 1;
+}
+
+message DeleteClientRequest {
+  string id = 1;
+}
+
+message DeleteClientResponse {
+  bool success = 1;
+}

@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package roundtables;
+
+option csharp_namespace = "SurveyService.Roundtables";
+
+service RoundtableService {
+  rpc CreateRoundtable (CreateRoundtableRequest) returns (CreateRoundtableResponse);
+  rpc GetRoundtable (GetRoundtableRequest) returns (GetRoundtableResponse);
+  rpc UpdateRoundtable (UpdateRoundtableRequest) returns (UpdateRoundtableResponse);
+  rpc DeleteRoundtable (DeleteRoundtableRequest) returns (DeleteRoundtableResponse);
+  rpc AddUserToRoundtable (AddUserToRoundtableRequest) returns (AddUserToRoundtableResponse);
+  rpc RemoveUserFromRoundtable (RemoveUserFromRoundtableRequest) returns (RemoveUserFromRoundtableResponse);
+}
+
+message Roundtable {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string client_id = 4; // Assuming a client owns/creates a roundtable
+  repeated string user_ids = 5; // Users participating in the roundtable
+  // Add other relevant roundtable fields like start_time, end_time, status etc.
+}
+
+message CreateRoundtableRequest {
+  Roundtable roundtable = 1;
+}
+
+message CreateRoundtableResponse {
+  Roundtable roundtable = 1;
+}
+
+message GetRoundtableRequest {
+  string id = 1;
+}
+
+message GetRoundtableResponse {
+  Roundtable roundtable = 1;
+}
+
+message UpdateRoundtableRequest {
+  Roundtable roundtable = 1;
+}
+
+message UpdateRoundtableResponse {
+  Roundtable roundtable = 1;
+}
+
+message DeleteRoundtableRequest {
+  string id = 1;
+}
+
+message DeleteRoundtableResponse {
+  bool success = 1;
+}
+
+message AddUserToRoundtableRequest {
+  string roundtable_id = 1;
+  string user_id = 2;
+}
+
+message AddUserToRoundtableResponse {
+  Roundtable roundtable = 1;
+}
+
+message RemoveUserFromRoundtableRequest {
+  string roundtable_id = 1;
+  string user_id = 2;
+}
+
+message RemoveUserFromRoundtableResponse {
+  Roundtable roundtable = 1;
+}
