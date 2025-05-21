@@ -4,49 +4,65 @@ package community;
 
 option csharp_namespace = "SurveyService.Community";
 
-// New definitions for Roundtable functionality:
-
 enum RoundtableStatus {
-  ROUNDTABLE_STATUS_UNSPECIFIED = 0; // Default, should not be used for filtering 'All'
+  ROUNDTABLE_STATUS_UNSPECIFIED = 0;
   ACTIVE = 1;
   INACTIVE = 2;
-  ALL = 3; // Specifically for filtering to get all statuses
+  ALL = 3; 
 }
 
 message UserDetails {
-  string user_id = 1;         // UUID of the user
-  string name = 2;            // Full name of the user
-  bool is_primary = 3;        // True if this user is a primary director/associate
+  string user_id = 1;
+  string name = 2;
+  bool is_primary = 3;
 }
 
 message Roundtable {
-  string id = 1;                      // UUID
+  string id = 1; 
   string name = 2;
-  UserDetails director = 3;           // Primary Director
+  UserDetails director = 3;
   repeated UserDetails associates = 4;
   RoundtableStatus status = 5;
   int32 clients_with_access_count = 6;
-  // Consider adding other fields like creation_timestamp, last_modified_timestamp if needed.
+  // New fields for Create/Edit Roundtable:
+  string abbreviation = 7;        // New field
+  string description = 8;         // New field
+  repeated string client_ids = 9; // New field to store IDs of selected clients
 }
 
 message ListRoundtablesRequest {
-  string search_query = 1;        // Search term for Roundtable Name, Director, or Associates
-  RoundtableStatus status_filter = 2; // Filter by status (ACTIVE, INACTIVE, ALL)
-  int32 page_size = 3;            // Number of items per page
-  string page_token = 4;          // Token for pagination (use string for flexibility)
-  // Future: Add sorting options, e.g., sort_by_field, sort_direction
+  string search_query = 1;
+  RoundtableStatus status_filter = 2;
+  int32 page_size = 3;
+  string page_token = 4;
 }
 
 message ListRoundtablesResponse {
   repeated Roundtable roundtables = 1;
-  string next_page_token = 2;     // Token to get the next page of results
-  int32 total_size = 3;           // Total number of roundtables matching the query (before pagination)
+  string next_page_token = 2;
+  int32 total_size = 3;
 }
 
-// Assuming CommunityService will host Roundtable methods for now
-service CommunityService {
-  // New RPC method for listing roundtables
-  rpc ListRoundtables(ListRoundtablesRequest) returns (ListRoundtablesResponse);
+// --- Messages for CreateRoundtable ---
+message CreateRoundtableRequest {
+  string name = 1;                            // Required
+  string abbreviation = 2;                    // Required, Unique
+  bool is_active = 3;                         // Defaults to true on client, server can respect if sent
+  string description = 4;                     // Optional
+  repeated string client_ids = 5;             // Optional, list of client UUIDs
+  repeated string director_user_ids = 6;      // Required, list of user UUIDs
+  repeated string associate_user_ids = 7;     // Optional, list of user UUIDs
+  string primary_director_user_id = 8;        // Required, UUID from director_user_ids
+  string primary_associate_user_id = 9;       // Optional, UUID from associate_user_ids
+}
 
-  // Other Roundtable related RPCs (Add, Edit) will be added later based on user stories.
+message CreateRoundtableResponse {
+  Roundtable roundtable = 1; // The newly created roundtable object
+}
+// --- End Messages for CreateRoundtable ---
+
+service CommunityService {
+  rpc ListRoundtables(ListRoundtablesRequest) returns (ListRoundtablesResponse);
+  // New RPC method for creating roundtables
+  rpc CreateRoundtable(CreateRoundtableRequest) returns (CreateRoundtableResponse);
 }
