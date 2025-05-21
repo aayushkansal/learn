@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package meeting;
+
+option csharp_namespace = "SurveyService.Meeting";
+
+service MeetingService {
+  rpc ScheduleMeeting (ScheduleMeetingRequest) returns (ScheduleMeetingResponse);
+  rpc GetMeeting (GetMeetingRequest) returns (GetMeetingResponse);
+  rpc UpdateMeetingDetails (UpdateMeetingDetailsRequest) returns (UpdateMeetingDetailsResponse);
+  rpc CancelMeeting (CancelMeetingRequest) returns (CancelMeetingResponse);
+  rpc ListMeetingsForRoundtable (ListMeetingsForRoundtableRequest) returns (ListMeetingsForRoundtableResponse);
+}
+
+message Meeting {
+  string id = 1;
+  string roundtable_id = 2; // Link to a roundtable
+  string title = 3;
+  string agenda = 4;
+  int64 start_time = 5; // Unix timestamp
+  int64 end_time = 6;   // Unix timestamp
+  string location_url = 7; // e.g., video conference link
+  repeated string participant_user_ids = 8;
+  // Add other relevant fields like status (scheduled, cancelled, completed)
+  enum MeetingStatus {
+    SCHEDULED = 0;
+    CANCELLED = 1;
+    COMPLETED = 2;
+  }
+  MeetingStatus status = 9;
+}
+
+// Request and Response messages
+
+message ScheduleMeetingRequest {
+  Meeting meeting = 1;
+}
+
+message ScheduleMeetingResponse {
+  Meeting meeting = 1;
+}
+
+message GetMeetingRequest {
+  string id = 1;
+}
+
+message GetMeetingResponse {
+  Meeting meeting = 1;
+}
+
+message UpdateMeetingDetailsRequest {
+  Meeting meeting = 1;
+}
+
+message UpdateMeetingDetailsResponse {
+  Meeting meeting = 1;
+}
+
+message CancelMeetingRequest {
+  string id = 1;
+}
+
+message CancelMeetingResponse {
+  bool success = 1;
+}
+
+message ListMeetingsForRoundtableRequest {
+  string roundtable_id = 1;
+  // Optional: filter by status or time range
+}
+
+message ListMeetingsForRoundtableResponse {
+  repeated Meeting meetings = 1;
+}
