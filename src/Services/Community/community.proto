@@ -4,12 +4,49 @@ package community;
 
 option csharp_namespace = "SurveyService.Community";
 
-service CommunityService {
-  // Define RPC methods here in the future
-  rpc GetStatus (GetStatusRequest) returns (GetStatusResponse);
+// New definitions for Roundtable functionality:
+
+enum RoundtableStatus {
+  ROUNDTABLE_STATUS_UNSPECIFIED = 0; // Default, should not be used for filtering 'All'
+  ACTIVE = 1;
+  INACTIVE = 2;
+  ALL = 3; // Specifically for filtering to get all statuses
 }
 
-message GetStatusRequest {}
-message GetStatusResponse {
-  string status = 1;
+message UserDetails {
+  string user_id = 1;         // UUID of the user
+  string name = 2;            // Full name of the user
+  bool is_primary = 3;        // True if this user is a primary director/associate
+}
+
+message Roundtable {
+  string id = 1;                      // UUID
+  string name = 2;
+  UserDetails director = 3;           // Primary Director
+  repeated UserDetails associates = 4;
+  RoundtableStatus status = 5;
+  int32 clients_with_access_count = 6;
+  // Consider adding other fields like creation_timestamp, last_modified_timestamp if needed.
+}
+
+message ListRoundtablesRequest {
+  string search_query = 1;        // Search term for Roundtable Name, Director, or Associates
+  RoundtableStatus status_filter = 2; // Filter by status (ACTIVE, INACTIVE, ALL)
+  int32 page_size = 3;            // Number of items per page
+  string page_token = 4;          // Token for pagination (use string for flexibility)
+  // Future: Add sorting options, e.g., sort_by_field, sort_direction
+}
+
+message ListRoundtablesResponse {
+  repeated Roundtable roundtables = 1;
+  string next_page_token = 2;     // Token to get the next page of results
+  int32 total_size = 3;           // Total number of roundtables matching the query (before pagination)
+}
+
+// Assuming CommunityService will host Roundtable methods for now
+service CommunityService {
+  // New RPC method for listing roundtables
+  rpc ListRoundtables(ListRoundtablesRequest) returns (ListRoundtablesResponse);
+
+  // Other Roundtable related RPCs (Add, Edit) will be added later based on user stories.
 }
