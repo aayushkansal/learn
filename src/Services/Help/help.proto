@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package meeting;
+package help;
 
-option csharp_namespace = "SurveyService.Meeting";
+option csharp_namespace = "SurveyService.Help";
 
-service MeetingService {
+service HelpService {
   // Define RPC methods here in the future
   rpc GetStatus (GetStatusRequest) returns (GetStatusResponse);
 }

@@ -1,0 +1,19 @@
+{
+  "name": ".NET Core gRPC Microservices",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "ms-dotnettools.csdevkit",         // C# Dev Kit
+    "ms-dotnettools.csharp",           // C#
+    "zxh404.vscode-proto3",            // Protobuf language support
+    "ms-azuretools.vscode-docker"      // Docker extension
+  ],
+  "forwardPorts": [], // Add any ports your services will use, e.g., [5000, 5001]
+  "postCreateCommand": "dotnet --version && protoc --version", // Verifies tools
+  "remoteUser": "vscode" // Or "root" if preferred, adjust Dockerfile if creating vscode user
+}

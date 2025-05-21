@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package meeting;
+package auriemmaexchange;
 
-option csharp_namespace = "SurveyService.Meeting";
+option csharp_namespace = "SurveyService.AuriemmaExchange";
 
-service MeetingService {
+service AuriemmaExchangeService {
   // Define RPC methods here in the future
   rpc GetStatus (GetStatusRequest) returns (GetStatusResponse);
 }
