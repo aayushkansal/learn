@@ -39,11 +39,11 @@ The project is organized into the following main directories:
 The system is composed of several microservices, each responsible for a specific domain. Each service will expose a gRPC API defined by `.proto` files located within their respective directories (e.g., `src/Services/User/user.proto`).
 
 **Core Modules:**
-- **MasterService:** Manages master data or configurations.
+- **MasterService:** Manages master data, configurations, and Roundtables (including their definition, listing, creation, and other related operations).
 - **MeetingService:** Handles scheduling and management of meetings.
 - **SurveyService:** Manages surveys, questions, and responses.
 - **UserService:** Handles user creation, authentication, and profile management.
-- **CommunityService:** Manages community features, potentially linking users and roundtables.
+- **CommunityService:** Manages community features. (Details of specific features to be defined).
 - **AuriemmaExchangeService:** Manages functionalities related to "Auriemma Exchange".
 - **HomeService:** Provides data or services for the main dashboard/home screen.
 - **ToolService:** Provides various tools or utilities within the platform.

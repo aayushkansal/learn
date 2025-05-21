@@ -7,9 +7,75 @@ option csharp_namespace = "SurveyService.Master";
 service MasterService {
   // Define RPC methods here in the future
   rpc GetStatus (GetStatusRequest) returns (GetStatusResponse);
+  rpc GetRoundtable (GetRoundtableRequest) returns (GetRoundtableResponse); // Existing
+  rpc ListRoundtables(ListRoundtablesRequest) returns (ListRoundtablesResponse); // New
+  rpc CreateRoundtable(CreateRoundtableRequest) returns (CreateRoundtableResponse); // New
 }
 
 message GetStatusRequest {}
 message GetStatusResponse {
   string status = 1;
+}
+
+// New enum and message definitions
+enum RoundtableStatus {
+  ROUNDTABLE_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+  ALL = 3;
+}
+
+message UserDetails {
+  string user_id = 1;
+  string name = 2;
+  bool is_primary = 3;
+}
+
+message Roundtable {
+  string id = 1;                        // Existing
+  string name = 2;                      // Existing
+  string description = 3;               // Existing
+  RoundtableStatus status = 4;          // New
+  int32 clients_with_access_count = 5; // New
+  string abbreviation = 6;              // New
+  repeated string client_ids = 7;       // New
+  UserDetails director_details = 8;     // New
+  repeated UserDetails associate_details = 9; // New
+}
+
+message ListRoundtablesRequest {
+  string search_query = 1;
+  RoundtableStatus status_filter = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListRoundtablesResponse {
+  repeated Roundtable roundtables = 1;
+  string next_page_token = 2;
+  int32 total_size = 3;
+}
+
+message GetRoundtableRequest {
+  string roundtable_id = 1;
+}
+
+message GetRoundtableResponse {
+  Roundtable roundtable = 1;
+}
+
+message CreateRoundtableRequest {
+  string name = 1;
+  string abbreviation = 2;
+  bool is_active = 3;
+  string description = 4;
+  repeated string client_ids = 5;
+  repeated string director_user_ids = 6;
+  repeated string associate_user_ids = 7;
+  string primary_director_user_id = 8;
+  string primary_associate_user_id = 9;
+}
+
+message CreateRoundtableResponse {
+  Roundtable roundtable = 1;
 }
