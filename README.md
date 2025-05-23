@@ -15,7 +15,7 @@ This project aims to build a microservices-based platform for managing surveys a
 The project is organized into the following main directories:
 
 - `src/Services/`: Contains the source code for individual microservices.
-  - `Master/`
+  - `Master/`: Contains `master.proto`, C# implementation (`MasterServiceImplementation.cs`, `RoundtableLogic.cs`), and the project file (`MasterService.csproj`).
   - `Meeting/`
   - `Survey/`
   - `User/`
@@ -28,7 +28,7 @@ The project is organized into the following main directories:
   - `AdvanceSearch/`
 - `src/Shared/`: Contains shared libraries, common code, or DTOs used across multiple services. (Planned)
 - `deployments/`: Contains deployment-related files. (Planned)
-  - `dockerfiles/`: Dockerfiles for building service images for production.
+  - `dockerfiles/`: Dockerfiles for building service images (e.g., `Master/Dockerfile` for MasterService).
   - `kubernetes/`: Kubernetes manifests for deploying the services.
 - `.devcontainer/`: Contains the configuration for the Dev Container development environment.
   - `Dockerfile`: Defines the Docker image for the dev environment, including .NET SDK and `protoc`.
@@ -118,9 +118,9 @@ If you make changes to `devcontainer.json` or the `Dockerfile` in `.devcontainer
 ## Future Development
 
 - Implement the gRPC services and business logic for each microservice.
-- Define `.csproj` files for each service and configure `Grpc.Tools` for automatic C# stub generation from `.proto` files during build.
+- Define `.csproj` files for each service (e.g., `MasterService.csproj` created for Master service) and configure `Grpc.Tools` for automatic C# stub generation from `.proto` files during build.
 - Set up build pipelines for each service.
-- Create production Dockerfiles for each service.
+- Create production Dockerfiles for each service (e.g., `deployments/dockerfiles/Master/Dockerfile` created for MasterService).
 - Write Kubernetes manifests for deployment and orchestration.
 - Implement inter-service communication patterns (e.g., API Gateway, direct calls, event-driven).
 - Add authentication and authorization.

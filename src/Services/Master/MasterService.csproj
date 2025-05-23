@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework> <!-- Assuming .NET 6 based on typical dev container setups. Adjust if another version is standard for this repo. -->
+    <!-- <Nullable>enable</Nullable> --> <!-- Optional: Depending on project coding standards -->
+    <!-- <ImplicitUsings>enable</ImplicitUsings> --> <!-- Optional: Depending on project coding standards -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="master.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" /> <!-- Use a recent stable version -->
+    <!-- Grpc.Tools is included by default with Grpc.AspNetCore for server-side projects of this type -->
+    <!-- No explicit Grpc.Tools needed if using this setup for server-side gRPC -->
+  </ItemGroup>
+
+  <!-- The .cs files (MasterServiceImplementation.cs, RoundtableLogic.cs) in the same directory
+       are typically included by default, so no explicit <Compile Include="..."> is needed for them. -->
+
+</Project>
